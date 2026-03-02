@@ -1,0 +1,16 @@
+# {{agent_name}} — Heartbeat Schedule
+
+## Recurring Tasks
+
+{{heartbeat_schedule}}
+
+## On Each Heartbeat
+1. Check active tasks and deadlines
+2. Execute scheduled items for this time window
+3. Log results in memory/YYYY-MM-DD.md
+4. Notify user only if action needed or high-priority items found
+
+## Notification Rules
+- **Immediate**: Critical errors, urgent items, approval requests
+- **Batch**: Group low-priority updates into daily/weekly summaries
+- **Silent**: Routine operations — log only, don't notify

@@ -1,0 +1,24 @@
+# {{setup_name}} — Map of Content
+
+## Agents
+{{#each agents}}
+- [[workspace-{{this.id}}/AGENTS.md]] — {{this.role}}
+{{/each}}
+
+## Skills
+{{#each skills}}
+- [[skills/{{this.name}}/SKILL.md]] — {{this.description}}
+{{/each}}
+
+## Workflows
+{{#each workflows}}
+- [[workflows/{{this.name}}/AGENT.md]] — {{this.description}}
+{{/each}}
+
+## Memory
+- [[memory/SYSTEM.md]] — Operational knowledge
+- [[memory/OWNER.md]] — Strategic notes
+- [[MEMORY.md]] — Curated long-term memory
+
+## Configuration
+- [[openclaw.json]] — Gateway configuration

@@ -1,0 +1,67 @@
+{
+  "agents": {
+    "defaults": {
+      "model": "{{default_model}}",
+      "workspace": "~/.openclaw/workspace"
+    },
+    "list": [
+      {{#each agents}}
+      {
+        "id": "{{this.id}}",
+        "workspace": "~/.openclaw/workspace-{{this.id}}"
+        {{#if this.sandbox}},
+        "sandbox": {
+          "mode": "{{this.sandbox.mode}}",
+          "scope": "{{this.sandbox.scope}}"
+        }
+        {{/if}}
+        {{#if this.tools}},
+        "tools": {
+          "allow": [{{this.tools.allow}}],
+          "deny": [{{this.tools.deny}}]
+        }
+        {{/if}}
+        {{#if this.default}},
+        "default": true
+        {{/if}}
+      }{{#unless @last}},{{/unless}}
+      {{/each}}
+    ]
+  },
+  "bindings": [
+    {{#each bindings}}
+    {
+      "agentId": "{{this.agentId}}",
+      "match": {
+        "channel": "{{this.channel}}"
+        {{#if this.accountId}},
+        "accountId": "{{this.accountId}}"
+        {{/if}}
+        {{#if this.peer}},
+        "peer": {
+          "kind": "{{this.peer.kind}}",
+          "id": "{{this.peer.id}}"
+        }
+        {{/if}}
+      }
+    }{{#unless @last}},{{/unless}}
+    {{/each}}
+  ],
+  "channels": {
+    {{channel_configurations}}
+  },
+  "mcp": {
+    "servers": {
+      {{#each mcp_servers}}
+      "{{this.name}}": {
+        "type": "stdio",
+        "command": "{{this.command}}",
+        "args": [{{this.args}}],
+        "env": {
+          {{this.env}}
+        }
+      }{{#unless @last}},{{/unless}}
+      {{/each}}
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# {{workflow_name}} — Workflow Agent
+
+## Purpose
+{{workflow_purpose}}
+
+## Trigger
+{{workflow_trigger}}
+
+## Algorithm
+
+{{workflow_steps}}
+
+## State Management
+- Track progress in `agent_notes.md`
+- Log each execution in `logs/YYYY-MM-DD-HH-MM.md`
+- Update `rules.md` only when the user explicitly changes preferences
+
+## Error Handling
+1. If a step fails, retry once after 30 seconds
+2. If retry fails, log the error and skip to next step
+3. If critical step fails, notify the user and pause workflow
+4. Never silently swallow errors — always log
+
+## Learning
+After each execution, note in agent_notes.md:
+- What worked well
+- What could be improved
+- Any new patterns detected

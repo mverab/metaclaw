@@ -1,0 +1,53 @@
+.env
+.env.*
+!.env.example
+
+.envrc
+.direnv/
+
+# Local test artifacts
+test/workspace/memory/
+test/workspace/MEMORY.md
+
+# Logs and temp files
+*.log
+*.pid
+tmp/
+
+.cache/
+
+# Secrets and credentials
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+
+# OS / editor artifacts
+.DS_Store
+.vscode/
+.idea/
+
+# Python artifacts
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# Node artifacts
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+
+# Media outputs (avoid committing big binaries)
+*.mp4
+*.mov
+*.mkv
+*.mp3
+*.wav
+*.srt
+clips/
+downloads/
+exports/

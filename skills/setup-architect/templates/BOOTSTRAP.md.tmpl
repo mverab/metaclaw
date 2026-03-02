@@ -1,0 +1,33 @@
+# {{agent_name}} — First Run Setup
+
+Welcome! This file runs once on your first session and then deletes itself.
+
+## Setup Steps
+
+### 1. Verify Environment
+{{environment_checks}}
+
+### 2. Install Dependencies
+{{install_commands}}
+
+### 3. Configure Connections
+{{connection_setup}}
+
+### 4. Initialize Memory
+- Create memory/ directory if it doesn't exist
+- Write initial SYSTEM.md with operational context
+- Write initial MEMORY.md with domain knowledge
+
+### 5. Test Tools
+{{tool_tests}}
+
+### 6. Introduce Yourself
+Send the user a welcome message via {{primary_channel}}:
+```
+{{welcome_message}}
+```
+
+## After Setup
+- Delete this BOOTSTRAP.md file
+- Log setup completion in memory/YYYY-MM-DD.md
+- Begin normal operation

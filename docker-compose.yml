@@ -1,0 +1,46 @@
+services:
+  openclaw-gateway:
+    image: ghcr.io/openclaw/openclaw:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:18789:18789"
+    environment:
+      OPENCLAW_GATEWAY_BIND: lan
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      BRAVE_API_KEY: ${BRAVE_API_KEY:-}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+    volumes:
+      # Persist OpenClaw state across container restarts
+      - openclaw-home:/home/node/.openclaw
+      # Mount our skill into the shared skills directory
+      - ./skills/setup-architect:/home/node/.openclaw/skills/setup-architect:ro
+      # Mount test workspace (for running tests)
+      - ./test/workspace:/home/node/.openclaw/workspace
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:18789/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  openclaw-cli:
+    image: ghcr.io/openclaw/openclaw:latest
+    network_mode: "service:openclaw-gateway"
+    depends_on:
+      openclaw-gateway:
+        condition: service_healthy
+    volumes:
+      - openclaw-home:/home/node/.openclaw
+      - ./skills/setup-architect:/home/node/.openclaw/skills/setup-architect:ro
+      - ./test/workspace:/home/node/.openclaw/workspace
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    entrypoint: ["node", "dist/index.js"]
+    profiles:
+      - cli
+
+volumes:
+  openclaw-home:
