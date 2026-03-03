@@ -54,4 +54,13 @@ exports/
 
 #docker test workspace
 docker-compose.yml
-makefile
+makefile    
+
+#codex
+.codex/
+
+#windsurf
+.windsurf/ 
+
+#openspec
+openspec/

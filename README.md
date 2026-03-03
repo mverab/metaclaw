@@ -1,5 +1,7 @@
 # MetaClaw Setup Architect
 
+![MetaClaw Banner](assets/branding/generated/download%20%2848%29.webp)
+
 A MetaClaw-branded OpenClaw skill that generates complete multi-agent setups from natural language descriptions. Describe what you want, and the MetaClaw Setup Architect produces every configuration file — agents, skills, workflows, memory, and installation steps — zero effort.
 
 ---
@@ -13,11 +15,15 @@ The **MetaClaw Setup Architect** is an OpenClaw skill that acts as a setup facto
 3. **Generates** every file: AGENTS.md, SOUL.md, MEMORY.md, skills, workflows, openclaw.json
 4. **Installs** the configuration with copy-pasteable commands
 
+## Who This Is For
+
+- **Founder-operators**: go from idea to a multi-agent operating setup in one guided workflow.
+- **Technical founders shipping fast**: turn rough product intent into structured agent architecture and execution files.
+- **Early-stage founder teams**: standardize AI operations without custom setup chaos.
+
 ## Quick Start
 
 ### Install the Skill
-
-#### Recommended (GitHub / skills.sh)
 
 ```bash
 # Install directly from GitHub repo
@@ -29,10 +35,8 @@ npx skills add mverab/metaclaw --skill metaclaw-setup-architect
 npx skills add mverab/metaclaw --list
 ```
 
-#### Local Development
-
 ```bash
-# Validate local skill discovery before pushing changes
+# Local development (before pushing)
 npx skills add /absolute/path/to/metaclaw --list
 ```
 
@@ -118,8 +122,6 @@ skills/metaclaw-setup-architect/
 
 ---
 
----
-
 ## Docker Testing
 
 Spin up an isolated OpenClaw instance with the skill mounted — no local install required.
@@ -138,10 +140,13 @@ cp .env.example .env
 # 2. Start gateway
 make up
 
-# 3. Open Control UI
+    # 3. Enforce low-cost model policy (no Opus)
+make enforce-model
+
+# 4. Open Control UI
 open http://127.0.0.1:18789
 
-# 4. Run smoke tests
+# 5. Run smoke tests
 make test
 ```
 
@@ -152,14 +157,16 @@ make test
 3. **Knowledge base** — all 4 knowledge files present
 4. **Templates** — all 11 template files present
 5. **Examples** — both example files present
-6. **Skill discovered** — appears in `openclaw skills list`
-7. **Agent trigger** — agent correctly activates Discovery phase on a test prompt
+6. **Model policy enforced** — Sonnet primary + Haiku fallback, Opus excluded
+7. **Skill discovered** — appears in `openclaw skills list`
+8. **Agent trigger** — agent correctly activates Discovery phase on a test prompt
 
 ### Useful Commands
 
 ```bash
 make logs    # tail gateway logs
 make shell   # bash session inside the container
+make enforce-model  # set Sonnet+Haiku policy, excluding Opus
 make down    # stop containers (data preserved)
 make clean   # hard reset — wipes the volume
 make pull    # update to latest OpenClaw image
