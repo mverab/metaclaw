@@ -1,12 +1,12 @@
-# OpenClaw Setup Architect
+# MetaClaw Setup Architect
 
-A meta-skill for OpenClaw that generates complete multi-agent setups from natural language descriptions. Describe what you want, and the Setup Architect produces every configuration file — agents, skills, workflows, memory, and installation steps — zero effort.
+A MetaClaw-branded OpenClaw skill that generates complete multi-agent setups from natural language descriptions. Describe what you want, and the MetaClaw Setup Architect produces every configuration file — agents, skills, workflows, memory, and installation steps — zero effort.
 
 ---
 
 ## What Is This?
 
-The **Setup Architect** is an OpenClaw skill that acts as a setup factory. Instead of manually configuring agents, writing SKILL.md files, and wiring up MCP servers, you describe your use case in plain English and the skill:
+The **MetaClaw Setup Architect** is an OpenClaw skill that acts as a setup factory. Instead of manually configuring agents, writing SKILL.md files, and wiring up MCP servers, you describe your use case in plain English and the skill:
 
 1. **Discovers** your requirements through 4-6 targeted questions
 2. **Designs** a multi-agent architecture with the right tools and patterns
@@ -51,7 +51,7 @@ Or:
 
 > "Help me create an OpenClaw setup for a community assistant that helps Skool community owners manage questions and find relevant lessons."
 
-The Setup Architect takes over from there.
+MetaClaw Setup Architect takes over from there.
 
 ---
 
