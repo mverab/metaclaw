@@ -1,5 +1,5 @@
 ---
-name: setup_architect
+name: metaclaw-setup-architect
 description: Design and generate complete multi-agent OpenClaw setups from a natural language description. Produces all configuration files, skills, workflows, memory structure, and installation steps — zero effort setup creation.
 emoji: 🏗️
 requires:

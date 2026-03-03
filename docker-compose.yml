@@ -15,7 +15,7 @@ services:
       # Persist OpenClaw state across container restarts
       - openclaw-home:/home/node/.openclaw
       # Mount our skill into the shared skills directory
-      - ./skills/setup-architect:/home/node/.openclaw/skills/setup-architect:ro
+      - ./skills/metaclaw-setup-architect:/home/node/.openclaw/skills/metaclaw-setup-architect:ro
       # Mount test workspace (for running tests)
       - ./test/workspace:/home/node/.openclaw/workspace
     healthcheck:
@@ -33,7 +33,7 @@ services:
         condition: service_healthy
     volumes:
       - openclaw-home:/home/node/.openclaw
-      - ./skills/setup-architect:/home/node/.openclaw/skills/setup-architect:ro
+      - ./skills/metaclaw-setup-architect:/home/node/.openclaw/skills/metaclaw-setup-architect:ro
       - ./test/workspace:/home/node/.openclaw/workspace
     environment:
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}

@@ -51,3 +51,7 @@ build/
 clips/
 downloads/
 exports/
+
+#docker test workspace
+docker-compose.yml
+makefile

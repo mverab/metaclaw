@@ -1,6 +1,6 @@
 # Skill Templates by Domain
 
-Pre-built SKILL.md templates for common domains. The setup-architect uses these as starting points when generating custom skills for a setup.
+Pre-built SKILL.md templates for common domains. The metaclaw-setup-architect uses these as starting points when generating custom skills for a setup.
 
 ---
 

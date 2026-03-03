@@ -17,12 +17,28 @@ The **Setup Architect** is an OpenClaw skill that acts as a setup factory. Inste
 
 ### Install the Skill
 
-```bash
-# Copy the skill to your OpenClaw skills directory
-cp -r skills/setup-architect ~/.openclaw/skills/setup-architect
+#### Recommended (GitHub / skills.sh)
 
-# Refresh skills
-# (or ask your agent: "refresh skills")
+```bash
+# Install directly from GitHub repo
+npx skills add mverab/metaclaw --skill metaclaw-setup-architect
+```
+
+```bash
+# Optional: verify what the repo exposes
+npx skills add mverab/metaclaw --list
+```
+
+#### Local Development
+
+```bash
+# Validate local skill discovery before pushing changes
+npx skills add /absolute/path/to/metaclaw --list
+```
+
+```bash
+# Install from local repo copy
+npx skills add /absolute/path/to/metaclaw --skill metaclaw-setup-architect
 ```
 
 ### Use It
@@ -42,7 +58,7 @@ The Setup Architect takes over from there.
 ## Project Structure
 
 ```
-skills/setup-architect/
+skills/metaclaw-setup-architect/
 ├── SKILL.md                          ← Main skill (the orchestrator)
 │
 ├── knowledge/                        ← Reference knowledge base
@@ -154,7 +170,7 @@ make pull    # update to latest OpenClaw image
 The `docker-compose.yml` uses the official `ghcr.io/openclaw/openclaw:latest` image (no local build) and bind-mounts the skill as read-only into the container's shared skills directory:
 
 ```
-./skills/setup-architect  →  /home/node/.openclaw/skills/setup-architect (ro)
+./skills/metaclaw-setup-architect  →  /home/node/.openclaw/skills/metaclaw-setup-architect (ro)
 ```
 
 The test workspace (`./test/workspace/`) is also mounted so the test agent's AGENTS.md and SOUL.md are available without any manual configuration.
