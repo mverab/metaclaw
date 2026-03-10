@@ -155,7 +155,9 @@ Install Ollama, `ollama pull llama3.2`, done. Set `OLLAMA_BASE_URL=http://192.16
 ```
 Available z.ai models: `zai/glm-4` (flagship), `zai/glm-4-flash` (fast/cheap), `zai/glm-4-air`.
 
-**Multi-model routing pattern** (fully local, no API keys at all):
+**Multi-model routing pattern** — choose one option:
+
+*Option A: Fully local (zero API keys)*
 ```json
 {
   "agents": {
@@ -172,7 +174,7 @@ Available z.ai models: `zai/glm-4` (flagship), `zai/glm-4-flash` (fast/cheap), `
 }
 ```
 
-**Multi-model routing pattern** (hybrid — z.ai cloud + local Ollama):
+*Option B: Hybrid — z.ai cloud + local Ollama (1 API key)*
 ```json
 {
   "agents": {

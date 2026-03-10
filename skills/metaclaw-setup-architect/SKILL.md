@@ -38,7 +38,8 @@ Read the user's initial description carefully. Then ask ONLY the questions whose
 1. **Problem & Pipeline**: "What specific end-to-end pipeline do you need? Walk me through the ideal workflow from trigger to final output."
 2. **Agent Count & Roles**: "Should this be a single powerful agent or multiple specialized agents? Any specific roles you envision?" (If unclear, propose a recommendation.)
 3. **Channels**: "Which communication platforms? (WhatsApp for quick updates, Telegram for control, Discord for multi-channel workflows, Slack for team integration)"
-4. **Tools & APIs**: "Do you already have API keys or accounts for specific services? (e.g., YouTube API, Search Console, specific CRM). Note: zero API keys needed for the base setup — Ollama runs LLMs locally, SearXNG handles search, and Gemma handles embeddings. Cloud providers (z.ai, Anthropic, OpenAI) are optional upgrades."
+4. **Tools & APIs**: "Do you already have API keys or accounts for specific services? (e.g., YouTube API, Search Console, specific CRM)"
+   > Always mention during Discovery that the base setup needs zero API keys: Ollama runs LLMs locally, SearXNG handles search, Gemma handles embeddings. Cloud providers (z.ai, Anthropic, OpenAI) are optional upgrades only if the user prefers them.
 5. **Autonomy Level**: "How autonomous should this be? (Supervised: asks before every action / Semi-auto: asks only for high-stakes / Full auto: runs independently and reports)"
 6. **Personality & Tone**: "Any specific personality for your agent(s)? (Professional, casual, technical, encouraging, blunt)"
 

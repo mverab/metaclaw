@@ -7,6 +7,7 @@ set -euo pipefail
 PASS=0
 FAIL=0
 CLI="docker compose run -T --rm --profile cli openclaw-cli"
+SKILL_PATH="/home/node/.openclaw/skills/metaclaw-setup-architect"
 
 # ── Colors ──────────────────────────────────────────────────────────────────
 GREEN='\033[0;32m'
@@ -17,6 +18,20 @@ NC='\033[0m'
 pass() { echo -e "${GREEN}✓${NC} $1"; PASS=$((PASS+1)); }
 fail() { echo -e "${RED}✗${NC} $1"; FAIL=$((FAIL+1)); }
 info() { echo -e "${YELLOW}→${NC} $1"; }
+
+# Check a list of files exist inside the gateway container.
+# Usage: check_files "label" file1 file2 ...
+check_files() {
+  local label=$1; shift
+  info "Checking $label files..."
+  for f in "$@"; do
+    if docker compose exec openclaw-gateway test -f "$SKILL_PATH/$f"; then
+      pass "$f present"
+    else
+      fail "$f missing"
+    fi
+  done
+}
 
 echo ""
 echo "══════════════════════════════════════════════"
@@ -36,64 +51,37 @@ fi
 
 # ── 2. Skill file is mounted ─────────────────────────────────────────────────
 info "Verifying skill is mounted in container..."
-if docker compose exec openclaw-gateway test -f /home/node/.openclaw/skills/metaclaw-setup-architect/SKILL.md; then
-  pass "SKILL.md found at /home/node/.openclaw/skills/metaclaw-setup-architect/SKILL.md"
+if docker compose exec openclaw-gateway test -f "$SKILL_PATH/SKILL.md"; then
+  pass "SKILL.md found at $SKILL_PATH/SKILL.md"
 else
   fail "SKILL.md not found — check volume mount in docker-compose.yml"
 fi
 
 # ── 3. Knowledge base files present ─────────────────────────────────────────
-info "Checking knowledge base files..."
-KB_FILES=(
-  "knowledge/file-system.md"
-  "knowledge/tool-catalog.md"
-  "knowledge/agent-patterns.md"
+check_files "knowledge base" \
+  "knowledge/file-system.md" \
+  "knowledge/tool-catalog.md" \
+  "knowledge/agent-patterns.md" \
   "knowledge/skill-templates.md"
-)
-for f in "${KB_FILES[@]}"; do
-  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/metaclaw-setup-architect/$f"; then
-    pass "$f present"
-  else
-    fail "$f missing"
-  fi
-done
 
 # ── 4. Template files present ───────────────────────────────────────────────
-info "Checking template files..."
-TMPL_FILES=(
-  "templates/AGENTS.md.tmpl"
-  "templates/SOUL.md.tmpl"
-  "templates/IDENTITY.md.tmpl"
-  "templates/MEMORY.md.tmpl"
-  "templates/TOOLS.md.tmpl"
-  "templates/HEARTBEAT.md.tmpl"
-  "templates/BOOTSTRAP.md.tmpl"
-  "templates/SKILL.md.tmpl"
-  "templates/workflow-AGENT.md.tmpl"
-  "templates/openclaw.json.tmpl"
+check_files "template" \
+  "templates/AGENTS.md.tmpl" \
+  "templates/SOUL.md.tmpl" \
+  "templates/IDENTITY.md.tmpl" \
+  "templates/MEMORY.md.tmpl" \
+  "templates/TOOLS.md.tmpl" \
+  "templates/HEARTBEAT.md.tmpl" \
+  "templates/BOOTSTRAP.md.tmpl" \
+  "templates/SKILL.md.tmpl" \
+  "templates/workflow-AGENT.md.tmpl" \
+  "templates/openclaw.json.tmpl" \
   "templates/MOC.md.tmpl"
-)
-for f in "${TMPL_FILES[@]}"; do
-  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/metaclaw-setup-architect/$f"; then
-    pass "$f present"
-  else
-    fail "$f missing"
-  fi
-done
 
 # ── 5. Example files present ─────────────────────────────────────────────────
-info "Checking example files..."
-EXAMPLE_FILES=(
-  "examples/youtube-clipper.md"
+check_files "example" \
+  "examples/youtube-clipper.md" \
   "examples/community-assistant.md"
-)
-for f in "${EXAMPLE_FILES[@]}"; do
-  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/metaclaw-setup-architect/$f"; then
-    pass "$f present"
-  else
-    fail "$f missing"
-  fi
-done
 
 # ── 6. Skill is discoverable by OpenClaw ─────────────────────────────────────
 info "Checking if skill is discovered by OpenClaw..."

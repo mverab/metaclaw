@@ -1,3 +1,10 @@
+x-llm-env: &llm-env
+  ZAI_API_KEY: ${ZAI_API_KEY:-}
+  ZAI_BASE_URL: ${ZAI_BASE_URL:-}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+
 services:
   openclaw-gateway:
     image: ghcr.io/openclaw/openclaw:latest
@@ -5,16 +12,13 @@ services:
     ports:
       - "127.0.0.1:18789:18789"
     depends_on:
-      - searxng
+      searxng:
+        condition: service_healthy
     environment:
+      <<: *llm-env
+      # lan = bind to all interfaces inside the container; the host-side port
+      # is still locked to 127.0.0.1 via the ports mapping above.
       OPENCLAW_GATEWAY_BIND: lan
-      # LLM — all optional, pick at least one
-      ZAI_API_KEY: ${ZAI_API_KEY:-}
-      ZAI_BASE_URL: ${ZAI_BASE_URL:-}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      # Local Ollama — no key needed, just point at your Ollama host
-      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
       OLLAMA_EMBED_URL: ${OLLAMA_EMBED_URL:-http://host.docker.internal:11434}
       # Search — SearXNG runs as a sibling container, no API key needed
       SEARXNG_URL: ${SEARXNG_URL:-http://searxng:8080}
@@ -43,7 +47,14 @@ services:
     image: searxng/searxng:latest
     restart: unless-stopped
     environment:
-      SEARXNG_SECRET_KEY: ${SEARXNG_SECRET_KEY:-changeme-in-production}
+      # Must be set in .env before first run — no insecure default provided
+      SEARXNG_SECRET_KEY: ${SEARXNG_SECRET_KEY:?Set SEARXNG_SECRET_KEY in .env}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
   openclaw-cli:
     image: ghcr.io/openclaw/openclaw:latest
@@ -56,11 +67,7 @@ services:
       - ./skills/metaclaw-setup-architect:/home/node/.openclaw/skills/metaclaw-setup-architect:ro
       - ./test/workspace:/home/node/.openclaw/workspace
     environment:
-      ZAI_API_KEY: ${ZAI_API_KEY:-}
-      ZAI_BASE_URL: ${ZAI_BASE_URL:-}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
-      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      <<: *llm-env
     entrypoint: ["node", "dist/index.js"]
     profiles:
       - cli
