@@ -128,25 +128,24 @@ Spin up an isolated OpenClaw instance with the skill mounted — no local instal
 
 ### Prerequisites
 - Docker Desktop (or Docker Engine + Compose v2)
-- At least 2 GB RAM
+- [Ollama](https://ollama.com) running on the host (`ollama serve`) with at least one model pulled
+- At least 2 GB RAM for the containers (Ollama runs on the host)
 
 ### Quick Start
 
 ```bash
-# 1. Copy env file and add your API key
+# 1. Copy env file and configure your LLM
 cp .env.example .env
-# edit .env — add ANTHROPIC_API_KEY (minimum required)
+# edit .env — set OLLAMA_BASE_URL (default: http://localhost:11434)
+# Ollama is the only requirement; all cloud provider keys are optional
 
-# 2. Start gateway
+# 2. Start gateway (SearXNG starts automatically as a sibling container)
 make up
 
-    # 3. Enforce low-cost model policy (no Opus)
-make enforce-model
-
-# 4. Open Control UI
+# 3. Open Control UI
 open http://127.0.0.1:18789
 
-# 5. Run smoke tests
+# 4. Run smoke tests
 make test
 ```
 
@@ -157,16 +156,14 @@ make test
 3. **Knowledge base** — all 4 knowledge files present
 4. **Templates** — all 11 template files present
 5. **Examples** — both example files present
-6. **Model policy enforced** — Sonnet primary + Haiku fallback, Opus excluded
-7. **Skill discovered** — appears in `openclaw skills list`
-8. **Agent trigger** — agent correctly activates Discovery phase on a test prompt
+6. **Skill discovered** — appears in `openclaw skills list`
+7. **Agent trigger** — agent correctly activates Discovery phase on a test prompt
 
 ### Useful Commands
 
 ```bash
 make logs    # tail gateway logs
 make shell   # bash session inside the container
-make enforce-model  # set Sonnet+Haiku policy, excluding Opus
 make down    # stop containers (data preserved)
 make clean   # hard reset — wipes the volume
 make pull    # update to latest OpenClaw image
@@ -174,13 +171,17 @@ make pull    # update to latest OpenClaw image
 
 ### How It Works
 
-The `docker-compose.yml` uses the official `ghcr.io/openclaw/openclaw:latest` image (no local build) and bind-mounts the skill as read-only into the container's shared skills directory:
+The `docker-compose.yml` starts two services:
 
-```
-./skills/metaclaw-setup-architect  →  /home/node/.openclaw/skills/metaclaw-setup-architect (ro)
-```
+- **`openclaw-gateway`** — the official `ghcr.io/openclaw/openclaw:latest` image with the skill bind-mounted read-only:
+  ```
+  ./skills/metaclaw-setup-architect  →  /home/node/.openclaw/skills/metaclaw-setup-architect (ro)
+  ```
+- **`searxng`** — self-hosted search engine, reachable by the gateway at `http://searxng:8080`, not exposed to the host
 
 The test workspace (`./test/workspace/`) is also mounted so the test agent's AGENTS.md and SOUL.md are available without any manual configuration.
+
+Ollama runs on the **host machine** (not in Docker) and is reached by the gateway via `host.docker.internal:11434`.
 
 ---
 

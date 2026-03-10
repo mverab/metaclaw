@@ -38,7 +38,7 @@ Read the user's initial description carefully. Then ask ONLY the questions whose
 1. **Problem & Pipeline**: "What specific end-to-end pipeline do you need? Walk me through the ideal workflow from trigger to final output."
 2. **Agent Count & Roles**: "Should this be a single powerful agent or multiple specialized agents? Any specific roles you envision?" (If unclear, propose a recommendation.)
 3. **Channels**: "Which communication platforms? (WhatsApp for quick updates, Telegram for control, Discord for multi-channel workflows, Slack for team integration)"
-4. **Tools & APIs**: "Do you already have API keys or accounts for specific services? (e.g., YouTube API, Search Console, specific CRM)"
+4. **Tools & APIs**: "Do you already have API keys or accounts for specific services? (e.g., YouTube API, Search Console, specific CRM). Note: zero API keys needed for the base setup — Ollama runs LLMs locally, SearXNG handles search, and Gemma handles embeddings. Cloud providers (z.ai, Anthropic, OpenAI) are optional upgrades."
 5. **Autonomy Level**: "How autonomous should this be? (Supervised: asks before every action / Semi-auto: asks only for high-stakes / Full auto: runs independently and reports)"
 6. **Personality & Tone**: "Any specific personality for your agent(s)? (Professional, casual, technical, encouraging, blunt)"
 
@@ -111,7 +111,11 @@ Consult your knowledge base:
 - [ ] Memory: SYSTEM.md, MOC.md
 
 ### Required API Keys / Accounts
-[List what the user needs to set up externally]
+[List what the user needs. Mark each as REQUIRED or OPTIONAL. Default to fully local:
+- LLM: Ollama (no key, default) — or z.ai / Anthropic / OpenAI as optional cloud upgrades
+- Search: SearXNG (included in docker-compose, no key)
+- Embeddings: Ollama + gemma2 (no key)
+- Channels: only needed if the user wants messaging integrations]
 ```
 
 **Ask the user**: "Does this architecture look right? Want to adjust anything before I generate the files?"
@@ -285,7 +289,8 @@ Before presenting generated files to the user, verify:
 ## Guardrails
 
 - **Never generate partial setups** — either complete all files or explain what's blocking you
-- **Never assume API keys exist** — always list what the user needs to obtain
+- **Prefer local-first providers** — default to Ollama + SearXNG so users need zero API keys; z.ai, Anthropic, OpenAI, and Brave are optional cloud upgrades — only recommend them when the user explicitly prefers them
+- **Never assume API keys exist** — always list what the user needs, and always offer the local alternative
 - **Never skip the Design phase** — the user must see and approve the architecture before you generate
 - **Keep it practical** — recommend tools that actually exist and work, not theoretical ones
 - **Start simple** — prefer fewer agents over more. Split only when responsibilities clearly diverge

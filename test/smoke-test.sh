@@ -36,8 +36,8 @@ fi
 
 # ── 2. Skill file is mounted ─────────────────────────────────────────────────
 info "Verifying skill is mounted in container..."
-if docker compose exec openclaw-gateway test -f /home/node/.openclaw/skills/setup-architect/SKILL.md; then
-  pass "SKILL.md found at /home/node/.openclaw/skills/setup-architect/SKILL.md"
+if docker compose exec openclaw-gateway test -f /home/node/.openclaw/skills/metaclaw-setup-architect/SKILL.md; then
+  pass "SKILL.md found at /home/node/.openclaw/skills/metaclaw-setup-architect/SKILL.md"
 else
   fail "SKILL.md not found — check volume mount in docker-compose.yml"
 fi
@@ -51,7 +51,7 @@ KB_FILES=(
   "knowledge/skill-templates.md"
 )
 for f in "${KB_FILES[@]}"; do
-  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/setup-architect/$f"; then
+  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/metaclaw-setup-architect/$f"; then
     pass "$f present"
   else
     fail "$f missing"
@@ -74,7 +74,7 @@ TMPL_FILES=(
   "templates/MOC.md.tmpl"
 )
 for f in "${TMPL_FILES[@]}"; do
-  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/setup-architect/$f"; then
+  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/metaclaw-setup-architect/$f"; then
     pass "$f present"
   else
     fail "$f missing"
@@ -88,7 +88,7 @@ EXAMPLE_FILES=(
   "examples/community-assistant.md"
 )
 for f in "${EXAMPLE_FILES[@]}"; do
-  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/setup-architect/$f"; then
+  if docker compose exec openclaw-gateway test -f "/home/node/.openclaw/skills/metaclaw-setup-architect/$f"; then
     pass "$f present"
   else
     fail "$f missing"
@@ -98,16 +98,16 @@ done
 # ── 6. Skill is discoverable by OpenClaw ─────────────────────────────────────
 info "Checking if skill is discovered by OpenClaw..."
 SKILLS_LIST=$($CLI skills list 2>/dev/null || echo "")
-if echo "$SKILLS_LIST" | grep -q "setup_architect"; then
-  pass "setup_architect skill discovered by OpenClaw"
+if echo "$SKILLS_LIST" | grep -q "metaclaw-setup-architect"; then
+  pass "metaclaw-setup-architect skill discovered by OpenClaw"
 else
-  fail "setup_architect skill not in skill list — check SKILL.md frontmatter (name: setup_architect)"
+  fail "metaclaw-setup-architect skill not in skill list — check SKILL.md frontmatter (name: metaclaw-setup-architect)"
   echo "      Skill list output: $SKILLS_LIST"
 fi
 
 # ── 7. Agent responds to a skill trigger ─────────────────────────────────────
 info "Sending test prompt to agent (may take 30-60s)..."
-PROMPT="Use the setup_architect skill. I want a simple single-agent setup for monitoring RSS feeds and sending me a daily digest via Telegram. Just do the Discovery phase and stop — ask me the required questions."
+PROMPT="Use the metaclaw-setup-architect skill. I want a simple single-agent setup for monitoring RSS feeds and sending me a daily digest via Telegram. Just do the Discovery phase and stop — ask me the required questions."
 
 RESPONSE=$($CLI agent --message "$PROMPT" --timeout 90 2>/dev/null || echo "ERROR: agent command failed")
 

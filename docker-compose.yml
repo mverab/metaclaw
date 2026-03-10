@@ -4,13 +4,26 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:18789:18789"
+    depends_on:
+      - searxng
     environment:
       OPENCLAW_GATEWAY_BIND: lan
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      # LLM — all optional, pick at least one
+      ZAI_API_KEY: ${ZAI_API_KEY:-}
+      ZAI_BASE_URL: ${ZAI_BASE_URL:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      # Local Ollama — no key needed, just point at your Ollama host
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      OLLAMA_EMBED_URL: ${OLLAMA_EMBED_URL:-http://host.docker.internal:11434}
+      # Search — SearXNG runs as a sibling container, no API key needed
+      SEARXNG_URL: ${SEARXNG_URL:-http://searxng:8080}
       BRAVE_API_KEY: ${BRAVE_API_KEY:-}
+      # Channels
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       # Persist OpenClaw state across container restarts
       - openclaw-home:/home/node/.openclaw
@@ -25,6 +38,13 @@ services:
       retries: 5
       start_period: 20s
 
+  # Self-hosted SearXNG — zero-key web search (internal only, no exposed ports)
+  searxng:
+    image: searxng/searxng:latest
+    restart: unless-stopped
+    environment:
+      SEARXNG_SECRET_KEY: ${SEARXNG_SECRET_KEY:-changeme-in-production}
+
   openclaw-cli:
     image: ghcr.io/openclaw/openclaw:latest
     network_mode: "service:openclaw-gateway"
@@ -36,8 +56,11 @@ services:
       - ./skills/metaclaw-setup-architect:/home/node/.openclaw/skills/metaclaw-setup-architect:ro
       - ./test/workspace:/home/node/.openclaw/workspace
     environment:
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ZAI_API_KEY: ${ZAI_API_KEY:-}
+      ZAI_BASE_URL: ${ZAI_BASE_URL:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
     entrypoint: ["node", "dist/index.js"]
     profiles:
       - cli
