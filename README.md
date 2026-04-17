@@ -87,7 +87,8 @@ skills/metaclaw-setup-architect/
 │
 └── examples/                         ← Complete end-to-end examples
     ├── youtube-clipper.md             ← 3-agent YouTube clipping pipeline
-    └── community-assistant.md         ← 2-agent Skool community manager
+    ├── community-assistant.md         ← 2-agent Skool community manager
+    └── obsidian-llm-wiki.md           ← 4-agent persistent markdown wiki for Obsidian
 ```
 
 ## Knowledge Base
@@ -156,7 +157,7 @@ make test
 2. **Skill mounted** — `SKILL.md` exists inside the container
 3. **Knowledge base** — all 4 knowledge files present
 4. **Templates** — all 11 template files present
-5. **Examples** — both example files present
+5. **Examples** — all example files present
 6. **Model policy enforced** — Sonnet primary + Haiku fallback, Opus excluded
 7. **Skill discovered** — appears in `openclaw skills list`
 8. **Agent trigger** — agent correctly activates Discovery phase on a test prompt
