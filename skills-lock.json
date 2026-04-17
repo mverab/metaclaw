@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "metaclaw-setup-architect": {
+      "source": "mverab/metaclaw",
+      "sourceType": "github",
+      "computedHash": "a6af195031fc5311d3ed1cc31377c6350cbb36aed22b9539b9b18585aabdf1ed"
+    }
+  }
+}
