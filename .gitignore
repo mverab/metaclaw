@@ -52,15 +52,35 @@ clips/
 downloads/
 exports/
 
-#docker test workspace
-docker-compose.yml
-makefile    
-
-#codex
+# Local AI / agent tool directories
+.agent/
+.claude/
+.codebuddy/
+.commandcode/
+.continue/
+.crush/
+.factory/
+.goose/
+.junie/
+.kilocode/
+.kiro/
+.kode/
+.mcpjam/
+.mux/
+.neovate/
+.openhands/
+.pi/
+.pochi/
+.qoder/
+.qwen/
+.roo/
+.trae/
+.zencoder/
 .codex/
+.windsurf/
 
-#windsurf
-.windsurf/ 
+# Local test runtime state
+test/workspace/.openclaw/
 
 #openspec
 openspec/
